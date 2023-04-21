@@ -10,10 +10,10 @@ $PIDs	= explode('-', $_SESSION['ProductID']);
 
 // Get integration parameters
 define( 'DRMX_ACCOUNT', 		get_option('drmx_account'));
-define( 'DRMX_AUTHENTICATION', 	get_option('drmx_authentication'));
+define( 'DRMX_AUTHENTICATION', 		get_option('drmx_authentication'));
 define( 'DRMX_GROUPID', 		get_option('drmx_groupid'));
 define( 'DRMX_RIGHTSID', 		get_option('drmx_rightsid'));
-define( 'WSDL', 				get_option('drmx_wsdl'));
+define( 'WSDL', 			get_option('drmx_wsdl'));
 define( 'DRMX_BINDING', 		get_option('drmx_binding'));
 
 $client = new nusoap_client(WSDL, 'wsdl');
@@ -163,9 +163,9 @@ function getIP(){
 
 function checkUserExists($client, $username) {
     $CheckUser_param = array(
-        'UserName'				=> $username,
-        'AdminEmail'			=> DRMX_ACCOUNT,
-        'WebServiceAuthStr'		=> DRMX_AUTHENTICATION,
+        'UserName'		=> $username,
+        'AdminEmail'		=> DRMX_ACCOUNT,
+        'WebServiceAuthStr'	=> DRMX_AUTHENTICATION,
     );
     
     $CheckUser = $client->call('CheckUserExists', array('parameters' => $CheckUser_param), '', '', true, true);
@@ -176,23 +176,23 @@ function addNewUser($client, $username, $userEmail){
 	$add_user_param = array(
 		'AdminEmail'		=> DRMX_ACCOUNT,
 		'WebServiceAuthStr'	=> DRMX_AUTHENTICATION,
-		'GroupID'			=> DRMX_GROUPID,
+		'GroupID'		=> DRMX_GROUPID,
 		'UserLoginName'		=> $username,
 		'UserPassword'		=> 'N/A',
-		'UserEmail'			=> $userEmail,
+		'UserEmail'		=> $userEmail,
 		'UserFullName'		=> 'N/A',
-		'Title'				=> 'N/A',
-		'Company'			=> 'N/A',
-		'Address'			=> 'N/A',
-		'City'				=> 'N/A',
-		'Province'			=> 'N/A',
-		'ZipCode'			=> 'N/A',
-		'Phone'				=> 'N/A',
+		'Title'			=> 'N/A',
+		'Company'		=> 'N/A',
+		'Address'		=> 'N/A',
+		'City'			=> 'N/A',
+		'Province'		=> 'N/A',
+		'ZipCode'		=> 'N/A',
+		'Phone'			=> 'N/A',
 		'CompanyURL'		=> 'N/A',
 		'SecurityQuestion'	=> 'N/A',
 		'SecurityAnswer'	=> 'N/A',
-		'IP'				=> getIP(),
-		'Money'				=> '0',
+		'IP'			=> getIP(),
+		'Money'			=> '0',
 		'BindNumber'		=> DRMX_BINDING,
 		'IsApproved'		=> 'yes',
 		'IsLockedOut'		=> 'no',
@@ -208,32 +208,33 @@ function updateRight($client, $lp_duration, $userEmail){
 	$ExpirationDate = date("Y/m/d", strtotime("+1 year"));
 
 	$updateRight_param = array(
-		'AdminEmail'				=> DRMX_ACCOUNT,
-		'WebServiceAuthStr'			=> DRMX_AUTHENTICATION,
-		'RightsID'					=> DRMX_RIGHTSID,
-		'Description'				=> "Courses Rights (Please don't delete)",
-		'PlayCount'					=> "-1",
-		'BeginDate'					=> $beginDate,
-		'ExpirationDate'			=> $ExpirationDate,
+		'AdminEmail'			=> DRMX_ACCOUNT,
+		'WebServiceAuthStr'		=> DRMX_AUTHENTICATION,
+		'RightsID'			=> DRMX_RIGHTSID,
+		'Description'			=> "Courses Rights (Please don't delete)",
+		'PlayCount'			=> "-1",
+		'BeginDate'			=> $beginDate,
+		'ExpirationDate'		=> $ExpirationDate,
 		'ExpirationAfterFirstUse'	=> $lp_duration,
-		'RightsPrice'				=> "0",
-		'AllowPrint'				=> "False",
-		'AllowClipBoard'			=> "False",
-		'AllowDoc'					=> "False",
-		'EnableWatermark'			=> "True",
-		'WatermarkText'				=> $userEmail." ++username",
-		'WatermarkArea'				=> "1,2,3,4,5,",
-		'RandomChangeArea'			=> "True",
-		'RandomFrquency'			=> "12",
-		'EnableBlacklist'			=> "False",
-		'EnableWhitelist'			=> "False",
-		'ExpireTimeUnit'			=> "Day",
-		'PreviewTime'				=> 3,
-		'PreviewTimeUnit'			=> "Day",
-		'PreviewPage'				=> 3,
+		'RightsPrice'			=> "0",
+		'AllowPrint'			=> "False",
+		'AllowClipBoard'		=> "False",
+		'AllowDoc'			=> "False",
+		'EnableWatermark'		=> "True",
+		'WatermarkText'			=> $userEmail." ++username",
+		'WatermarkArea'			=> "1,2,3,4,5,",
+		'RandomChangeArea'		=> "True",
+		'RandomFrquency'		=> "12",
+		'EnableBlacklist'		=> "True",
+		'EnableWhitelist'		=> "True",
+		'ExpireTimeUnit'		=> "Day",
+		'PreviewTime'			=> 3,
+		'PreviewTimeUnit'		=> "Day",
+		'PreviewPage'			=> 3,
+		'DisableVirtualMachine'		=> 'True',
 	);
-	$update_Right = $client->call("UpdateRight", array("parameters" => $updateRight_param), "", "", true, true);
-	return $update_Right["UpdateRightResult"];
+	$update_Right = $client->call("UpdateRightWithDisableVirtualMachine", array("parameters" => $updateRight_param), "", "", true, true);
+	return $update_Right["UpdateRightWithDisableVirtualMachineResult"];
 }
 
 function checkUserIsRevoked($client, $username){
