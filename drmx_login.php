@@ -85,11 +85,11 @@ while($order_result = mysqli_fetch_array($order_query,MYSQLI_ASSOC)){
 					}
 	
 					// check user is revoked
-					if(checkUserIsRevoked($client, $username)){
+					/*if(checkUserIsRevoked($client, $username)){
 						$errorInfo = 'Username: '.$username.' is revoked.';
 						header("location:drmx_LicError.php?error=".$errorInfo."&message=".$message);
 						exit;
-					}
+					}*/
 					
 					/*** Obtaining course duration ***/
 					$lp_duration = 180;
